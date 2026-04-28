@@ -1,0 +1,20 @@
+<div class="shell">
+  <nav class="sidebar">
+    <div class="sidebar__logo">
+      <span class="sidebar__logo-icon">💸</span>
+      <span class="sidebar__logo-text">Finanse</span>
+    </div>
+
+    <ul class="sidebar__nav">
+      <li>
+        <a routerLink="/dashboard" routerLinkActive="sidebar__link--active" class="sidebar__link">
+          Dashboard
+        </a>
+      </li>
+    </ul>
+  </nav>
+
+  <main class="main-content">
+    <router-outlet />
+  </main>
+</div>

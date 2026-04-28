@@ -1,0 +1,77 @@
+<div class="dashboard">
+
+  <header class="dashboard__header">
+    <div>
+      <h1 class="dashboard__title">Dashboard</h1>
+      <p class="dashboard__subtitle">Przegląd finansów</p>
+    </div>
+    <button class="btn btn--primary" (click)="toggleForm()">
+      {{ showForm() ? '✕ Zamknij' : '+ Dodaj transakcję' }}
+    </button>
+  </header>
+
+  @if (showForm()) {
+  <app-transaction-form (formSubmitted)="onTransactionAdded()" (cancelled)="showForm.set(false)" />
+  }
+
+  <section class="stats">
+    <div class="stat-card">
+      <span class="stat-card__label">Przychody</span>
+      <span class="stat-card__value stat-card__value--income">
+        {{ totalIncome() | currency:'PLN':'symbol':'1.2-2':'pl' }}
+      </span>
+    </div>
+    <div class="stat-card">
+      <span class="stat-card__label">Wydatki</span>
+      <span class="stat-card__value stat-card__value--expense">
+        {{ totalExpenses() | currency:'PLN':'symbol':'1.2-2':'pl' }}
+      </span>
+    </div>
+    <div class="stat-card stat-card--balance">
+      <span class="stat-card__label">Saldo</span>
+      <span class="stat-card__value">
+        {{ balance() | currency:'PLN':'symbol':'1.2-2':'pl' }}
+      </span>
+    </div>
+  </section>
+
+  <section class="transactions">
+    <h2 class="section-title">Ostatnie transakcje</h2>
+
+    @if (isLoading()) {
+    <div class="loader">
+      <span class="loader__spinner"></span>
+      <span>Ładowanie...</span>
+    </div>
+    }
+
+    @if (!isLoading()) {
+    @for (tx of transactions(); track tx.id) {
+    <div class="tx-row" [class.tx-row--expense]="tx.transactionType === 'Expense'"
+      [class.tx-row--income]="tx.transactionType === 'Income'">
+      <div class="tx-row__icon">
+        {{ tx.transactionType === 'Expense' ? '↓' : '↑' }}
+      </div>
+      <div class="tx-row__info">
+        <span class="tx-row__desc">{{ tx.description }}</span>
+        <span class="tx-row__meta">
+          {{ tx.date | date:'dd MMM yyyy' }}
+          @if (tx.expenseType) {
+          · {{ tx.expenseType }}
+          }
+        </span>
+      </div>
+      <span class="tx-row__amount">
+        {{ tx.transactionType === 'Expense' ? '−' : '+' }}
+        {{ tx.amount | currency:'PLN':'symbol':'1.2-2':'pl' }}
+      </span>
+    </div>
+    } @empty {
+    <div class="empty-state">
+      <p>Brak transakcji.</p>
+      <p>Kliknij <strong>Dodaj transakcję</strong>, aby zacząć.</p>
+    </div>
+    }
+    }
+  </section>
+</div>
