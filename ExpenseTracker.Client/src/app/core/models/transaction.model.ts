@@ -1,4 +1,4 @@
-export type ExpenseType = 'Food' | 'Transport' | 'Housing' | 'Entertainment' | 'Health' | 'Other';
+export type ExpenseType = 'Food' | 'Clothing' | 'Transport' | 'Housing' | 'Entertainment' | 'Health' | 'Other';
 export type TransactionType = 'Expense' | 'Income';
 
 export interface Transaction {

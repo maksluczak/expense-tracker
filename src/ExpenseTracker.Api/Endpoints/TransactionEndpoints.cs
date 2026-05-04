@@ -11,16 +11,34 @@ public static class TransactionEndpoints
         var group = app.MapGroup("/api/transactions")
             .WithTags("Transactions");
         
+        group.MapPost("/expense", async ([FromBody] CreateExpenseRequest request, ITransactionService transactionService) =>
+        {
+            var id = await transactionService.CreateExpenseAsync(request);
+            return Results.Created($"/api/transactions/{id}", id);
+        });
+
+        group.MapPost("/income", async ([FromBody] CreateIncomeRequest request, ITransactionService transactionService) =>
+        {
+            var id = await transactionService.CreateIncomeAsync(request);
+            return Results.Created($"/api/transactions/{id}", id);
+        });
+        
         group.MapGet("/", async (ITransactionService transactionService) =>
         {
             var transactions = await transactionService.GetAllTransactionsAsync();
             return Results.Ok(transactions);
         });
-        
-        group.MapPost("/expense", async ([FromBody] CreateExpenseRequest request, ITransactionService transactionService) =>
+
+        group.MapGet("/monthly", async ([AsParameters] DateRequest request, ITransactionService transactionService) =>
         {
-            var id = await transactionService.CreateExpenseAsync(request);
-            return Results.Created($"/api/transactions/{id}", id);
+            var transactions = await transactionService.GetAllTransactionsFromOneMonthAsync(request);
+            return Results.Ok(transactions);
+        });
+        
+        group.MapGet("/balance", async (ITransactionService transactionService) =>
+        {
+            var transactions = await transactionService.CalculateBalanceForEveryMonthInYearAsync();
+            return Results.Ok(transactions);
         });
     }
 }

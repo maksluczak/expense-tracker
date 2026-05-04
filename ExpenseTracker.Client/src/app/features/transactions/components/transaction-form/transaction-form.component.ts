@@ -22,11 +22,12 @@ export class TransactionFormComponent {
   isSubmitting = false;
 
   readonly expenseTypes: ExpenseType[] = [
-    'Food', 'Transport', 'Housing', 'Entertainment', 'Health', 'Other'
+    'Food', 'Clothing', 'Transport', 'Housing', 'Entertainment', 'Health', 'Other'
   ];
 
   readonly expenseLabels: Record<ExpenseType, string> = {
     Food: 'Jedzenie',
+    Clothing: 'Ubrania',
     Transport: 'Transport',
     Housing: 'Mieszkanie',
     Entertainment: 'Rozrywka',
